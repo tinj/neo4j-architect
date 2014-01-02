@@ -121,9 +121,8 @@ var Construct = function () {
 
   this._exp = function (_sequence, params, options, callback) {
     // console.log('exp');
-    var neo4jResponse, queries;
-    _.isObject(options) && (neo4jResponse = options.neo4j || options.queries);
-    neo4jResponse && (queries = []);
+    var neo4jResponse = _.isObject(options) ? options.neo4j || options.queries : false;
+    var queries = neo4jResponse ? [] : null;
     var _query = function (query, params, callback) {
       // console.log('_query');
       db.query(query, params, function (err, results) {
