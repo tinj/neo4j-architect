@@ -34,7 +34,7 @@ var Construct = function () {
   };
 
   this._add = function () {
-    this._sequence.push.call(this._sequence, arguments);
+    this._sequence.push.apply(this._sequence, arguments);
     // console.log(fn);
     // this._sequence.push(fn);
     return this;
@@ -73,10 +73,36 @@ var Construct = function () {
     return this._add('params');
   };
 
-  this.cypher = function (fn) {
+  this.construct = function (fn) {
     if (!fn._construct) {
       throw new Error('Not a Construct function');
     }
+    return this._add(fn);
+  };
+
+  // can handle constructs, functions, 'query', 'params'
+  this.then = function (fn, initParams) {
+    if (!fn) {
+      throw new Error('Missing function');
+    } else if (_.isFunction(fn)) {
+      if (true === initParams) {
+        return this._add({
+          params: true,
+          fn: fn
+        });
+      }
+    } else if (_.isObject(fn)) {
+      if (!fn._construct) {
+        throw new Error('Not a Construct');
+      }
+    } else if (_.isString(fn)) {
+      if ('query' == fn || 'params' == fn) {
+        return this._add(fn);
+      }
+    } else {
+      throw new Error('Invalid Argument');
+    }
+
     return this._add(fn);
   };
 
@@ -93,10 +119,11 @@ var Construct = function () {
   }
   _setAsync(this);
 
-  this.exp = function (_sequence, params, options, callback) {
+  this._exp = function (_sequence, params, options, callback) {
     // console.log('exp');
-    var neo4jResponse = options.neo4j;
-    var queries = neo4jResponse ? [] : null;
+    var neo4jResponse, queries;
+    _.isObject(options) && (neo4jResponse = options.neo4j || options.queries);
+    neo4jResponse && (queries = []);
     var _query = function (query, params, callback) {
       // console.log('_query');
       db.query(query, params, function (err, results) {
@@ -168,9 +195,10 @@ var Construct = function () {
     });
   };
 
+  // call this to export
   this.fn = function () {
     // pass in the fn sequence
-    return _.partial(this.exp, this._sequence);
+    return _.partial(this._exp, this._sequence);
   };
 
   this.init.apply(this, arguments);
