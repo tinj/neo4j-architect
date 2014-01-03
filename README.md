@@ -12,6 +12,8 @@ Check out [users.js](https://github.com/tinj/node-neo4j-swagger-api/blob/master/
 In use at [Neo4j-Swagger](http://neo4j-swagger.tinj.com).
 
 
+Big plans, more to come!
+
 ### Setup
 
 In you .env file, set NEO4J_URL = YOUR_NEO4J_URL (default localhost:7474)
