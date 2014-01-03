@@ -15,7 +15,10 @@ var Architect = function () {
   this.neo = neo;
 
   this.Cypher = Cypher;
+  this.cypher = Cypher;
+
   this.Construct = Construct;
+  this.construct = Construct;
 
   this.getConstruct = function () {
     return this.Construct;
