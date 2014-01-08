@@ -12,17 +12,28 @@ Check out [users.js](https://github.com/tinj/node-neo4j-swagger-api/blob/master/
 In use at [Neo4j-Swagger](http://neo4j-swagger.tinj.com).
 
 
-Big plans, more to come!
+Big plans, more to come! Pull-requests welcome!
 
 ### Setup
 
-In you .env file, set NEO4J_URL = YOUR_NEO4J_URL (default localhost:7474)
+```javascript
+
+    // .env file
+    NEO4J_URL=YOUR_NEO4J_URL
+
+    // set the neo4j URL, only needs to be done once
+    var Architect = require('neo4j-architect');
+    Architect.init(url);  // defaults: (url || process.env.NEO4J_URL || 'http://localhost:7474')
+```
 
 ### Model
 
 ```javascript
     // user.js
-    var Construct = require('neo4j-architect');
+
+    var Architect = require('neo4j-architect');
+    Architect.init();
+    var Construct = Architect.Construct;
 
     // construct the cypher query and params
     var _getSingleUserQuery = function (params, callback) {
@@ -79,6 +90,7 @@ Links
 * [Neo4j-Swagger UI](https://github.com/tinj/neo4j-swagger-ui)
 * [Node-Neo4j](https://github.com/thingdom/node-neo4j)
 * [Neo4j](http://www.neo4j.org)
+* [Graphene DB](http://www.graphenedb.com)
 
 
 ### License

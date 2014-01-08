@@ -11,14 +11,11 @@ var neo = require('./lib/neo'),
 
 var Architect = function () {
   this.init = neo.init;
-  this.neo4j = neo;
-  this.neo = neo;
+  this.neo4j = this.neo = neo;
 
-  this.Cypher = Cypher;
-  this.cypher = Cypher;
+  this.Cypher = this.cypher = Cypher;
 
-  this.Construct = Construct;
-  this.construct = Construct;
+  this.Construct = this.construct = Construct;
 
   this.getConstruct = function () {
     return this.Construct;
