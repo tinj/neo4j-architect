@@ -23,7 +23,16 @@ Big plans, more to come! Pull-requests welcome!
 
     // set the neo4j URL, only needs to be done once
     var Architect = require('neo4j-architect');
-    Architect.init(url);  // defaults: (url || process.env.NEO4J_URL || 'http://localhost:7474')
+
+    // with a url
+    Architect.init("http://someserver.graphenedb.com:1234");
+
+    // without a url but with a .env, url = process.env.NEO4J_URL
+    Architect.init();
+
+    // without a url or .env, url = 'http://localhost:7474'
+    Architect.init();
+
 ```
 
 ### Model
@@ -51,7 +60,7 @@ Big plans, more to come! Pull-requests welcome!
     }
 
     // extract the data from the cypher results
-    var _singleUserResult = function (results, callback) {
+    var _extractSingleUser = function (results, callback) {
       if (results.length) {
         callback(null, results[0].user._node.data);
       } else {
@@ -59,9 +68,14 @@ Big plans, more to come! Pull-requests welcome!
       }
     }
 
-    var getUser = new Construct().query(_getSingleUserQuery).then(_singleUserResult);
-    var createUser = new Construct(_createUserQuery, _singleUserResult);
-    var createUsers = new Construct().then(_createManySetupParams).map(createUser)
+    // _getSingleUserQuery -> db.query -> extractSingleUser
+    var getUser = new Construct(_getSingleUserQuery).query().then(_extractSingleUser);
+
+    // _createUserQuery -> db.query (assumed) -> extractSingleUser
+    var createUser = new Construct(_createUserQuery, _extractSingleUser);
+
+    // _createManySetupParams -> map(createUser) (chaining to a map of another Construct)
+    var createUsers = new Construct(_createManySetupParams).map(createUser)
 
     module.exports = {
       getUser: getUser.fn(),
@@ -83,7 +97,7 @@ Big plans, more to come! Pull-requests welcome!
     };
 ```
 
-Links
+### Links
 -------------
 * [Neo4j-Swagger](http://neo4j-swagger.tinj.com)
 * [Neo4j-Swagger Server](https://github.com/tinj/node-neo4j-swagger-api)
