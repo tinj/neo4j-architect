@@ -59,9 +59,18 @@ Big plans, more to come! Pull-requests welcome!
       }
     }
 
+    // construct sequentially
     var getUser = new Construct().query(_getSingleUserQuery).then(_singleUserResult);
+
+    // construct with a query and result
     var createUser = new Construct(_createUserQuery, _singleUserResult);
-    var createUsers = new Construct().then(_createManySetupParams).map(createUser)
+
+    // construct with a setup fn and then mapping over another Construct
+    var createUsers = new Construct().then(_createManySetupParams).map(createUser);
+
+    var getParallel = new Construct(_splitParams).parallel([getUser, getUser]).then(_mergeResults);
+
+    {ids: [1,2]} -> [{id:1}, {id:2}] -> [getUser({id:1}), getUser({id:2})] -> [user1, user2]
 
     module.exports = {
       getUser: getUser.fn(),
