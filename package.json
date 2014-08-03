@@ -1,6 +1,6 @@
 {
   "name": "neo4j-architect",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Neo4j-Architect constructs functional Neo4j queries",
   "main": "architect",
   "repository": {
